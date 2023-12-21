@@ -1,0 +1,14 @@
+import java.lang.Number;
+import com.av360.gfam.presentation.model.rume.KpTeilergebnisDto;
+import com.av360.gfam.presentation.model.RumeUploadDto;
+import com.av360.gfam.presentation.model.rume.BerichtdatenRumeDto;
+
+rule "Betreiber-Nox-Fehler-Land_00"
+	dialect "mvel"
+	agenda-group "KOMPLEXPRUEFUNG_00_BETREIBER"
+	when
+		RumeUploadDto( bericht != null, (bericht.nox >= 30.0 || bericht.nox == null) )
+		teilergebnis : KpTeilergebnisDto( )
+	then
+		teilergebnis.addRegelergebnisFehler( "Nox ist außerhalb der Grenzen", "Betreiber-Nox-Fehler-Land_00", "Nox kann nicht genehmigt werden" );
+end

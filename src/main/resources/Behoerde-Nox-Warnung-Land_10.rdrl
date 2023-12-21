@@ -1,0 +1,14 @@
+import java.lang.Number;
+import com.av360.gfam.presentation.model.rume.KpTeilergebnisDto;
+import com.av360.gfam.presentation.model.RumeUploadDto;
+import com.av360.gfam.presentation.model.rume.BerichtdatenRumeDto;
+
+rule "Behoerde-Nox-Warnung-Land_10"
+	dialect "mvel"
+	agenda-group "KOMPLEXPRUEFUNG_10_BEHOERDE"
+	when
+		RumeUploadDto( bericht != null , bericht.nox > 20.0 , bericht.nox < 30.0 , bericht.nox != null )
+		teilergebnis : KpTeilergebnisDto( )
+	then
+		teilergebnis.addRegelergebnisWarnung( "Nox liegt nahe an den Maximalwerten", "Behoerde-Nox-Warnung-Land_10", "Nox muss unter Kontrolle sein" );
+end

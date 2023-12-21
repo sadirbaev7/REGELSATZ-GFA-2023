@@ -1,0 +1,14 @@
+import java.lang.Number;
+import com.av360.gfam.presentation.model.rume.KpTeilergebnisDto;
+import com.av360.gfam.presentation.model.RumeUploadDto;
+import com.av360.gfam.presentation.model.rume.BerichtdatenRumeDto;
+
+rule "Behoerde-Staub-Warnung-Land_03"
+	dialect "mvel"
+	agenda-group "KOMPLEXPRUEFUNG_03_BEHOERDE"
+	when
+		RumeUploadDto( bericht != null , bericht.staub > 30.0 , bericht.staub < 40.0 , bericht.staub != null )
+		teilergebnis : KpTeilergebnisDto( )
+	then
+		teilergebnis.addRegelergebnisWarnung( "Staub liegt nahe an den Maximalwerten", "Behoerde-Staub-Warnung-Land_03", "Staub muss unter Kontrolle sein" );
+end

@@ -1,0 +1,14 @@
+import java.lang.Number;
+import com.av360.gfam.presentation.model.rume.KpTeilergebnisDto;
+import com.av360.gfam.presentation.model.RumeUploadDto;
+import com.av360.gfam.presentation.model.rume.BerichtdatenRumeDto;
+
+rule "Behoerde-feuerungswarmeleistungGenehmigte-Fehler-Land_00"
+	dialect "mvel"
+	agenda-group "KOMPLEXPRUEFUNG_00_BEHOERDE"
+	when
+		RumeUploadDto( bericht != null , (bericht.feuerungswarmeleistungGenehmigte >= 25.0 || bericht.feuerungswarmeleistungGenehmigte == null) )
+		teilergebnis : KpTeilergebnisDto( )
+	then
+		teilergebnis.addRegelergebnisFehler( "Feuerungswarmeleistung ist außerhalb der Grenzen", "Behoerde-feuerungswarmeleistungGenehmigte-Fehler-Land_00", "Feuerungswarmeleistung kann nicht genehmigt werden" );
+end

@@ -1,0 +1,14 @@
+import java.lang.Number;
+import com.av360.gfam.presentation.model.rume.KpTeilergebnisDto;
+import com.av360.gfam.presentation.model.RumeUploadDto;
+import com.av360.gfam.presentation.model.rume.BerichtdatenRumeDto;
+
+rule "Behoerde-feuerungswarmeleistungGenehmigte-Warnung-Land_07"
+	dialect "mvel"
+	agenda-group "KOMPLEXPRUEFUNG_07_BEHOERDE"
+	when
+		RumeUploadDto( bericht != null , bericht.feuerungswarmeleistungGenehmigte > 15.0 , bericht.feuerungswarmeleistungGenehmigte < 25.0 , bericht.feuerungswarmeleistungGenehmigte != null )
+		teilergebnis : KpTeilergebnisDto( )
+	then
+		teilergebnis.addRegelergebnisWarnung( "Feuerungswarmeleistung liegt nahe an den Maximalwerten", "Behoerde-feuerungswarmeleistungGenehmigte-Warnung-Land_07", "Feuerungswarmeleistung muss unter Kontrolle sein" );
+end
